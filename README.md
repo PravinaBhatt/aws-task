@@ -1,4 +1,4 @@
-﻿Create Server on AWS and run checker script to validate its liveliness
+Create Server on AWS and run checker script to validate its liveliness
 ======================================================================
 
 # Goal
