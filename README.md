@@ -73,5 +73,5 @@ Steps to create server on AWS and run Nginx with custom static file:
 	* Check nginx service status > sudo systemctl status nginx
 	* Check content of browser/ local host: curl localhost / accessing public DNS in browser
 
-
-
+# Solution 
+* Public URL of EC2 instace created: http://ec2-52-15-100-77.us-east-2.compute.amazonaws.com/
