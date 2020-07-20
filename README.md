@@ -32,12 +32,7 @@ NOTE: Steps a, b and c are not part of server creating steps, but it is mandator
 	d. Create IAM role for instance creation on AWS management console (This is mandatory step for server creation performed in later steps).
 
 2. Create EC2 instance on AWS Console: This step is used to create instance with required instance base image, type, storage, group and other settings for creation of server.
-	a. Launch instance from console.
-	b. Select base image for instance machine. 
-	c.  Select type.
-	d. Configure details like network, subnet, IAM role (refer step 1.c) or you can leave it as default.
-	e. Add storage, tag and security group if needed else just hit “Review and Launch”.
-	f. When you will launch the instance, pop-up option will ask to enter ec2 cloud key pair. This option usually display default key pair, if you have one created already (refer step 1.a). Else you need to create one first and follow step 1 to get instance created.
+	a. Launch instance from console.\nb. Select base image for instance machine. \nc.  Select type.\nd. Configure details like network, subnet, IAM role (refer step 1.c) or you can leave it as default.\ne. Add storage, tag and security group if needed else just hit “Review and Launch”.\nf. When you will launch the instance, pop-up option will ask to enter ec2 cloud key pair. This option usually display default key pair, if you have one created already (refer step 1.a). Else you need to create one first and follow step 1 to get instance created.
 
 3. Set inbound rules for EC2 instances (under AWS management console): This step is used to specify the type of traffic our EC2 instance can be managed to handle for example: http, https or SSH and limit them as per required settings.
 	a. Edit inbound rules
