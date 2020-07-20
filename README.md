@@ -1,5 +1,5 @@
-Infrastructure Coding Test
-==========================
+﻿Create Server on AWS and run checker script to validate its liveliness
+======================================================================
 
 # Goal
 
@@ -21,44 +21,51 @@ You are required to set up a new server in AWS. It must:
 1.0.6
 ```
 
-# Mandatory Work
+# Create the server.
 
-Fork this repository.
+Steps to create server on AWS and run Nginx with custom static file:
+1. Create IAM service under AWS Management Console: This step is used to create IAM group, user, roles, policies and other access configurations 
+NOTE: Steps a, b and c are not part of server creating steps, but it is mandatory for creating an applications in org and allow/limit users 
+a. Make sure to set up security policies first by managing account settings under “Security Status”. And save all the imp credentials like Multi-factor Authentication, Access keys, Cloud key pairs (will be used in later steps) and other certificates.
+b. Create user group for your desired task/app_code.
+c. Add users to the above created group who can be able to access its associated resources.
+d. Create IAM role for instance creation on AWS management console (This is mandatory step for server creation performed in later steps).
 
-* Provide instructions on how to create the server.
-* Provide a script that can be run periodically (and externally) to check if the server is up and serving the expected version number. Use your scripting language of choice.
-* Provide scripts for the install steps (it doesn't have to be a single script)
-* Alter the README to contain the steps required to:
-  * Create the server.
-  * Run the checker script.
+2. Create EC2 instance on AWS Console: This step is used to create instance with required instance base image, type, storage, group and other settings for creation of server.
+a. Launch instance from console.
+b. Select base image for instance machine. 
+c.  Select type.
+d. Configure details like network, subnet, IAM role (refer step 1.c) or you can leave it as default.
+e. Add storage, tag and security group if needed else just hit “Review and Launch”.
+f. When you will launch the instance, pop-up option will ask to enter ec2 cloud key pair. This option usually display default key pair, if you have one created already (refer step 1.a). Else you need to create one first and follow step 1 to get instance created.
+
+3. Set inbound rules for EC2 instances (under AWS management console): This step is used to specify the type of traffic our EC2 instance can be managed to handle for example: http, https or SSH and limit them as per required settings.
+a. Edit inbound rules
+b. Configure inbound rules with required network traffic details that your instances are expected. For example: Only certain IP can access EC2 instance via SSH, then set the rule under SSH type with custom IP option and add IP range.
+
+4. Launch and install nginx on created instance.
+a. Connect instance as browser-based SSH connection (We can also try SSH into instance).
+b. Once you connect as ec2-user, you can see console of ec2 instance machine. 
+c. Set new password for root user > sudo password root
+d. Try updating yum > sudo yum update
+e. Install nginx > sudo yum install nginx
+f. Start & Enable nginx service > sudo systemctl start nginx / sudo systemctl enable nginx
+g. Check nginx status > sudo systemctl status nginx
+h. Check on browser if nginx is up and running > curl localhost / accessing public DNS in browser
+5. Replace nginx homepage with custom static file: Usually when nginx service is launched on any machine it will display custom index.html content on browser. This is configured in /etc/nginx/nginx.conf file in linux machines. We can tweak the file location in config file and make custom content displayed on nginx homepage. 
+a. Create version.txt file containing custom data.
+b. Locate nginx config file: In this example, as we are using linux machine this file can be seen under /etc/nginx/nginx.conf
+c. Replace server section with 
+server {
+root	/;
+       
+location / {
+try_files $uri /nginx/repos/version.txt;
+}
+
+d. The above tweak in server file location will display content of file “version.txt” at nginx homepage now as we swapped the content with index.html
+e. Restart nginx service > sudo systemctl restart nginx
+f. Check nginx service status > sudo systemctl status nginx
+i. Check content of browser/ local host: curl localhost / accessing public DNS in browser
 
 
-# Extra Credit
-
-We know time is precious, we won't mark you down for not doing the extra credits, but if you want to give them a go...
-
-* Use a configuration management tool (such as Terraform or Ansible) to bootstrap the server.
-* Put the server behind a load balancer.
-* Run Nginx inside a Docker container.
-* Make the checker script SSH into the instance, check if Nginx is running and start it if it isn't.
-* Have a domain name and a valid SSL certificate (Let's Encrypt) or be able to decribe what would need to happen to get SSL certificate and a decure nginx configuration.
-* Provide an upstream application on a seperate port, and use nginx to serve it.  Bonus points if docker is used.
-
-# Questions
-
-#### What scripting languages can I use?
-
-Any one you like. You’ll have to justify your decision. We use bash, Ansible and Terraform. Howevr, feel free to pick something you're familiar with, as you'll need to be able to discuss it.
-
-#### Will I have to pay for the AWS charges?
-
-No. You are expected to use free-tier resources only and not generate any charges. Please remember to delete your resources once the review process is over so you are not charged by AWS.
-
-#### What will you be evaluating me on?
-
-Scripting skills, ellegance, understanding of the technologies you use, security, documentation.
-
-#### Will I have a chance to explain my choices?
-
-Feel free to comment your code, or put explanations in a pull request within the repo.
-If we proceed to a phone interview, we’ll be asking questions about why you made the choices you made.
